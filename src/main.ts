@@ -39,7 +39,7 @@ export class App implements OnInit {
   name = 'Abhisk';
   form!: FormGroup;
   initialValue!: any;
-  unsubscribe = new Subject();
+  unsubscribe = new Subject<void>();
   hasUnsavedData: boolean = false;
 
   ngOnInit(): void {
