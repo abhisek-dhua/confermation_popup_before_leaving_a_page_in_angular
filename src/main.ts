@@ -2,11 +2,12 @@ import 'zone.js/dist/zone';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { Observable, Observer, of, Subject, takeUntil } from 'rxjs';
 import {
-  FormControl,
   FormGroup,
-  ReactiveFormsModule,
   Validators,
+  FormControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
 @Component({
@@ -38,6 +39,8 @@ export class App implements OnInit {
   name = 'Abhisk';
   form!: FormGroup;
   initialValue!: any;
+  unsubscribe = new Subject();
+  hasUnsavedData: boolean = false;
 
   ngOnInit(): void {
     this.initilizeForm();
@@ -51,8 +54,24 @@ export class App implements OnInit {
     this.initialValue = this.form.getRawValue();
   }
 
+  isFormValueChanges() {
+    const form = this.form;
+    const initialValue = form.value;
+    form.valueChanges.pipe(takeUntil(this.unsubscribe)).subscribe((value) => {
+      // console.log(value);
+      this.hasUnsavedData = Object.keys(initialValue).some(
+        (key) => form.value[key] != initialValue[key]
+      );
+      console.log(this.hasUnsavedData);
+    });
+  }
+
   onSubmit() {
     console.log(this.form.getRawValue());
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
   }
 }
 
