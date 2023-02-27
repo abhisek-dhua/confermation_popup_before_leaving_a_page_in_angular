@@ -1,6 +1,7 @@
 import 'zone.js/dist/zone';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Observable, Observer, of, Subject, takeUntil } from 'rxjs';
 import {
@@ -10,10 +11,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
+const routes: Routes = [];
+
 @Component({
   selector: 'my-app',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
+  // imports: [CommonModule, ReactiveFormsModule, RouterModule.forRoot(routes)],
+  // exports:[RouterModule],
   template: `
     <h1>Hello im {{name}}!</h1>
     <form [formGroup]=form (ngSubmit)="onSubmit()">
@@ -33,6 +38,8 @@ import {
     <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
   </div>
     </form>
+
+    <router-outlet></router-outlet>
   `,
 })
 export class App implements OnInit {
